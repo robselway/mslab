@@ -16,10 +16,10 @@ on:
 # Environment variables are defined so that they can be used throughout the job definitions.
 env:
   imageRepository: 'content-web'
-  resourceGroupName: 'fabmedical-[SUFFIX]'
-  clusterName: 'fabmedical-[SUFFIX]'
-  containerRegistryName: 'fabmedical[SUFFIX]'
-  containerRegistry: 'fabmedical[SUFFIX].azurecr.io'
+  # resourceGroupName: 'fabmedical-[SUFFIX]'
+  # clusterName: 'fabmedical-[SUFFIX]'
+  # containerRegistryName: 'fabmedical[SUFFIX]'
+  containerRegistry: 'contosotradersacr887779.azurecr.io'
   dockerfilePath: './content-web'
   tag: '${{ github.run_id  }}'
 
@@ -53,21 +53,21 @@ jobs:
           ${{ env.containerRegistry }}/${{ env.imageRepository }}:${{ env.tag }}
           ${{ env.containerRegistry }}/${{ env.imageRepository }}:latest
 
-    - uses: Azure/aks-set-context@v1
-      with:
-        creds: '${{ secrets.AZURE_CREDENTIALS }}'
-        cluster-name: '${{ env.clusterName }}'
-        resource-group: '${{ env.resourceGroupName }}'
+    # - uses: Azure/aks-set-context@v1
+    #   with:
+    #     creds: '${{ secrets.AZURE_CREDENTIALS }}'
+    #     cluster-name: '${{ env.clusterName }}'
+    #     resource-group: '${{ env.resourceGroupName }}'
 
-    - name: Create ACR credentials secret
-      uses: azure/k8s-create-secret@v1
-      with:
-        container-registry-url: ${{ env.containerRegistry }}.azurecr.io
-        container-registry-username: ${{ secrets.ACR_USERNAME }}
-        container-registry-password: ${{ secrets.ACR_PASSWORD }}
-        secret-name: ingress-demo-secret
-        namespace: ingress-demo
-        arguments: --force true
+    # - name: Create ACR credentials secret
+    #   uses: azure/k8s-create-secret@v1
+    #   with:
+    #     container-registry-url: ${{ env.containerRegistry }}.azurecr.io
+    #     container-registry-username: ${{ secrets.ACR_USERNAME }}
+    #     container-registry-password: ${{ secrets.ACR_PASSWORD }}
+    #     secret-name: ingress-demo-secret
+    #     namespace: ingress-demo
+    #     arguments: --force true
         
     # - name: Deploy to AKS
     #   uses: azure/k8s-deploy@v1
@@ -79,4 +79,3 @@ jobs:
     #       ${{ env.containerRegistry }}.azurecr.io/${{ env.imageRepository }}:${{ env.tag }}
     #     imagepullsecrets: |
     #       ingress-demo-secret
-    #     namespace: ingress-demo
